@@ -35,5 +35,18 @@ def user_info(session_id):
         counter += 1
     print(f"current_user: {client_data_actual["current_user"]}")
     print(f"current_user_domain_name: {client_data_actual["domain_name"]}")
-    return client_data_actual["current_user"]
+    user_sid, _, _ = win32security.LookupAccountName(
+        client_data_actual["current_user"],
+        client_data_actual["domain_name"]
+    )
+    return client_data_actual["current_user"], user_sid
     
+def is_admin(username):
+    groups = win32net.NetUserGetLocalGroups(
+        None,
+        username
+    )
+    return any(
+        group.lower() == "administrators"
+        for group in groups
+    )

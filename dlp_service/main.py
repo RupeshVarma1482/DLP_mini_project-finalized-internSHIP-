@@ -96,12 +96,18 @@ import time
 import win32ts
 import win32event
 from dlp_service.pub_sub import Broker
+from dlp_service.user_session import user_info, is_admin
 
 def main(event):
     try:
-        subscription = Broker()
-        user_data = subscription.Subscribe(topic = "USER_LOGIN").get()
-        print(f"user_data: {user_data}")
+        user_name = user_info(win32ts.wTSGetActiveConsoleSessionId())
+        if is_admin(user_name):
+            print(f"admin privilages found... disabling DLP service")
+        else:
+            print(f"no admin privilages found... enabling DLP service")
+        # subscription = Broker()
+        # user_data = subscription.Subscribe(topic = "USER_LOGIN").get()
+        # print(f"user_data: {user_data}")
         result = win32event.WaitForSingleObject(event, 1000)
         if result == win32event.WAIT_TIMEOUT:
             print(f"MAIN did not recieve any halt message from windows.")
