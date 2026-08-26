@@ -1,0 +1,16 @@
+services:
+    roundcube:
+        image: roundcube/roundcubemail:1.7.3-apache
+        container_name: roundcube
+
+        environment:
+            ROUNDCUBEMAIL_DB_TYPE: sqlite
+
+        ports:
+            - "8000:80"
+
+        volumes:
+            - ./config/config.inc.php:/var/www/html/config/config.inc.php
+            - ../../integrations/roundcube/my_dlp:/var/www/html/plugins/my_dlp:ro
+
+        restart: unless-stopped
