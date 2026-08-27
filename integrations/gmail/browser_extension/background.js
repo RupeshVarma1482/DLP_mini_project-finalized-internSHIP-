@@ -64,6 +64,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     error: error.toString(),
                 });
             });
-        fetch("http://127.0.01:5000/")
+        // fetch("http://127.0.01:5000/")
+    }
     return true;
 });

@@ -127,7 +127,7 @@ def get_client_policy_criteria(client_name):
     client_db_details["policy_criteria"] = query_result[0][1]
     client_db_details["query_match_count"] = len(query_result)
 
-    # return client_db_details
     print(f"client_db_details: {client_db_details}")
+    return client_db_details
 
-print(get_client_policy_criteria("userB"))
+print(f"get_client_policy_criteria('userB'): {get_client_policy_criteria("userB")}")

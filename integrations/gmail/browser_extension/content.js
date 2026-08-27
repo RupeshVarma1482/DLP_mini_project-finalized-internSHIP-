@@ -47,6 +47,23 @@ document.addEventListener("change", (event) => {
         console.log(`filename: ${file.name}`);
         console.log(`filetype: ${file.type}`);
         console.log(`filesize: ${file.size}`);
+        console.log(`file:`);
+        console.log(file);
+
+        fetch("http:127.0.0.1:5000/get_file_info", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/octet-stream"
+            },
+            body: file
+        })
+        .then((response) => {
+            console.log(`response obtained`);
+        })
+        .catch((error) => {
+            console.log(`error is: ${error}`);
+        })
+
         const data = {
             "filename" : file.name,
             "filetype" : file.type,

@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, request
-from dlp_service.policies.policy_processsing import process_policy
+from dlp_service.policies.policy_processing import process_policy
+import sys
+
+# policy_info = sys.argv[1]
 
 app = Flask(__name__)
 
@@ -12,12 +15,14 @@ def base():
 
 @app.route("/get_file_info", methods = ["POST"])
 def get_file_info():
+    global policy_info
     data = request.get_json()
     print(f"data received from the extension:")
     print(data)
     print(f"its type is:")
     print(type(data))
-    policy_criteria = process_policy(data)
+
+    # process_policy(policy_info, file_data)
 
     return jsonify({
         "allowed": True

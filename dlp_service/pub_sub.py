@@ -18,13 +18,29 @@ class Broker:
     def request_topics(self):
         return self.topics
 
-ins1 = Broker()
+class Broker:
+    def __init__(self):
+        self.topics = {}
+    def Publish(self, topic, message):
+        if topic not in self.topics:
+            return
+        for callback in self.topics[topic]:
+            callback(message)
+    def Subscribe(self, topic, callback):
+        if topic not in self.topics:
+            self.topics[topic] = []
+        self.topics[topic].append(callback)
 
-q1 = ins1.Subscribe(topic = "user_login")
+broker = Broker()
 
-ins1.Publish(topic = "user_login", message = "respective file is available")
 
-present_topics = ins1.request_topics()
-print(f"present_topics: {present_topics}")
+# ins1 = Broker()
 
-print(f"subscriber1 queue: {q1.get()}")
+# q1 = ins1.Subscribe(topic = "user_login")
+
+# ins1.Publish(topic = "user_login", message = "respective file is available")
+
+# present_topics = ins1.request_topics()
+# print(f"present_topics: {present_topics}")
+
+# print(f"subscriber1 queue: {q1.get()}")
