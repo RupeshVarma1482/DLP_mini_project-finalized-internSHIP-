@@ -42,23 +42,46 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return;
     }
     if (message.type == "get_file_info") {
+        const { fileName, fileType, fileSize } = message["data"];
+        const metadata = { fileName, fileType, fileSize };
+        console.log(`type of message.data.fileContent:`, message["data"]["fileContent"] instanceof File);
+        console.log(`type of message.data.fileContent:`, message["data"]["fileContent"] instanceof Blob);
+        console.log(`metadata :`);
+        console.log(metadata);
+        console.log(`file metadata received from content.js which is: ${JSON.stringify(message["data"], null, 4)}`);
+        const formData = new FormData();
+        console.log(`formData at the time of initialization :`);
+        console.log([...formData.entries()]);
+        formData.append(
+            "fileMetadata",
+            JSON.stringify(metadata)
+        )
+        formData.append(
+            "fileContent",
+            message["data"]["fileContent"]
+        )
+        console.log(`formData after appending data :`);
+        console.log([...formData.entries()]);
         fetch("http://127.0.0.1:5000/get_file_info", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(message.data),
+            // headers: {
+            //     "Content-Type": "application/json",
+            // },
+            body: formData,
         })
             .then(async (response) => {
-                const result = await response.json();
-                console.log(`DLP result: ${JSON.stringify(result)}`);
+                const result = await response.text();
+                console.log(`raw DLP result: ${JSON.stringify(result)}`);
+                const resultJSON = await JSON.parse(result);
+                console.log(`DLP resultJSON: ${JSON.stringify(resultJSON)}`);
+                // console.log(`DLP result: ${JSON.stringify(result)}`);
                 sendResponse({
                     success: true,
                     data: result,
                 });
             })
             .catch((error) => {
-                console.log(`could not contact DLP API: ${error}`);
+                console.log(`could not contact DLP API: ${error.stack}`);
                 sendResponse({
                     success: false,
                     error: error.toString(),

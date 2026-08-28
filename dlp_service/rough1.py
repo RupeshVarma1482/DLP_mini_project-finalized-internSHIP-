@@ -1,5 +1,8 @@
-import subprocess
-import sys
+# import subprocess
+# import sys
 
-path = sys.executable
-print(f"path: {path}")
+# path = sys.executable
+# print(f"path: {path}")
+
+
+

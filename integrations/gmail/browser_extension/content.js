@@ -34,7 +34,7 @@
 
 console.log("=====DLP gmail extension loaded=====");
 
-document.addEventListener("change", (event) => {
+document.addEventListener("change", async(event) => {
     const element = event.target;
     if (element.tagName !== "INPUT") {
         return
@@ -50,24 +50,28 @@ document.addEventListener("change", (event) => {
         console.log(`file:`);
         console.log(file);
 
-        fetch("http:127.0.0.1:5000/get_file_info", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/octet-stream"
-            },
-            body: file
-        })
-        .then((response) => {
-            console.log(`response obtained`);
-        })
-        .catch((error) => {
-            console.log(`error is: ${error}`);
-        })
+        // fetch("http:127.0.0.1:5000/get_file_info", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/octet-stream"
+        //     },
+        //     body: file
+        // })
+        // .then((response) => {
+        //     console.log(`response obtained`);
+        // })
+        // .catch((error) => {
+        //     console.log(`error is: ${error}`);
+        // })
+
+        const buffer = await file.arrayBuffer()
+        console.log(`fileByteLength : ${buffer.byteLength}`);
 
         const data = {
-            "filename" : file.name,
-            "filetype" : file.type,
-            "filesize" : file.size
+            "fileName" : file.name,
+            "fileType" : file.type,
+            "fileSize" : file.size,
+            "fileContent" : buffer
         };
         chrome.runtime.sendMessage({
             "type" : "get_file_info",
