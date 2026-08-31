@@ -4,6 +4,8 @@
     "version": "1.0.0",
     "description": "DLP test extension for Gmail attachments",
 
+    "message_serialization": "structured_clone",
+
     "permissions": ["tabs"],
 
     "host_permissions": [

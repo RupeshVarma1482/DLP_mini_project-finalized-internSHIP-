@@ -37,29 +37,45 @@
 
 console.log("=====DLP gmail extension's background service loaded=====");
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.type !== "get_file_info") {
         return;
     }
     if (message.type == "get_file_info") {
+        console.log(message["data"]["fileContent"]);
+        console.log(typeof message["data"]["fileContent"]);
+        console.log(Object.keys(message["data"]["fileContent"]));
+
         const { fileName, fileType, fileSize } = message["data"];
         const metadata = { fileName, fileType, fileSize };
-        console.log(`type of message.data.fileContent:`, message["data"]["fileContent"] instanceof File);
-        console.log(`type of message.data.fileContent:`, message["data"]["fileContent"] instanceof Blob);
+        console.log(
+            `type of message.data.fileContent:`,
+            message["data"]["fileContent"] instanceof File,
+        );
+        console.log(
+            `type of message.data.fileContent:`,
+            message["data"]["fileContent"] instanceof Blob,
+        );
         console.log(`metadata :`);
         console.log(metadata);
-        console.log(`file metadata received from content.js which is: ${JSON.stringify(message["data"], null, 4)}`);
+        console.log(
+            `file metadata received from content.js which is: ${JSON.stringify(message["data"], null, 4)}`,
+        );
         const formData = new FormData();
         console.log(`formData at the time of initialization :`);
         console.log([...formData.entries()]);
-        formData.append(
-            "fileMetadata",
-            JSON.stringify(metadata)
-        )
-        formData.append(
-            "fileContent",
-            message["data"]["fileContent"]
-        )
+        formData.append("fileMetadata", JSON.stringify(metadata));
+
+        const file = message.data.fileContent; 
+        const buffer = await file.arrayBuffer(); 
+        const blob = new Blob([buffer], {
+            type: file.type,
+        });
+
+        console.log("blob size:", blob.size);
+        console.log("blob type:", blob.type);
+
+        formData.append("fileContent", blob, file.name);
         console.log(`formData after appending data :`);
         console.log([...formData.entries()]);
         fetch("http://127.0.0.1:5000/get_file_info", {
@@ -70,9 +86,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             body: formData,
         })
             .then(async (response) => {
+                console.log("HTTP status:", response.status);
                 const result = await response.text();
                 console.log(`raw DLP result: ${JSON.stringify(result)}`);
-                const resultJSON = await JSON.parse(result);
+                const resultJSON = JSON.parse(result);
                 console.log(`DLP resultJSON: ${JSON.stringify(resultJSON)}`);
                 // console.log(`DLP result: ${JSON.stringify(result)}`);
                 sendResponse({
@@ -87,7 +104,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     error: error.toString(),
                 });
             });
-        // fetch("http://127.0.01:5000/")
     }
     return true;
 });

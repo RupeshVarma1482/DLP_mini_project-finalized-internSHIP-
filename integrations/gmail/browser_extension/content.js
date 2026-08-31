@@ -30,17 +30,15 @@
 //     }
 // });
 
-
-
 console.log("=====DLP gmail extension loaded=====");
 
-document.addEventListener("change", async(event) => {
+document.addEventListener("change", async (event) => {
     const element = event.target;
     if (element.tagName !== "INPUT") {
-        return
+        return;
     }
     if (element.type !== "file") {
-        return
+        return;
     }
     for (const file of element.files) {
         console.log("===== DLP attachment detected by content.js =====");
@@ -64,18 +62,18 @@ document.addEventListener("change", async(event) => {
         //     console.log(`error is: ${error}`);
         // })
 
-        const buffer = await file.arrayBuffer()
-        console.log(`fileByteLength : ${buffer.byteLength}`);
+        // const buffer = await file.arrayBuffer()
+        // console.log(`fileByteLength : ${buffer.byteLength}`);
 
         const data = {
-            "fileName" : file.name,
-            "fileType" : file.type,
-            "fileSize" : file.size,
-            "fileContent" : buffer
+            fileName: file.name,
+            fileType: file.type,
+            fileSize: file.size,
+            fileContent: file,
         };
         chrome.runtime.sendMessage({
-            "type" : "get_file_info",
-            "data" : data
+            type: "get_file_info",
+            data: data,
         });
     }
 });

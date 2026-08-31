@@ -23,17 +23,24 @@ def get_file_info():
     try:
         file_metadata = json.loads(request.form["fileMetadata"])
         print(f"file_metadata received:", file_metadata)
-        # file_content = request.files["fileContent"]
-        file_content = request.form["fileContent"]
-        print(f"file_content received:", file_content)
+        file = request.files["fileContent"]
+        print(f"file received:", file)
         
-        print(f"the type of file_content is: {type(file_content)}")
+        print(f"the type of file is: {type(file)}")
         print(f"the type of file_metadata is: {type(file_metadata)}")
-        # process_policy(policy_info, file_data)
 
-        return jsonify({
-            "allowed": True
-        })
+        data = file.read(20)
+        print(f"data: {data} | it's type is: {type(data)}", end = "\n\n\n\n\n\n\n")
+        # text = data.decode("utf-8")
+        # print(f"text: {text}")
+        
+        return jsonify(process_policy(file_metadata, file))
+        
+        # return jsonify(decision)
+
+        # return jsonify({
+        #     "allowed": True
+        # })
     except Exception as e:
         print(f"ERROR:", repr(e))
         return jsonify({
@@ -41,6 +48,4 @@ def get_file_info():
         }), 500
 
 if __name__ == "__main__":
-    # 127.0.0.1:5000 -> default
-    # 127.0.0.1:8765 -> content.js listening on
     app.run(host = "127.0.0.1", port = 5000)
