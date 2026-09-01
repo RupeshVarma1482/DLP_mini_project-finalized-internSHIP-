@@ -34,6 +34,7 @@ def get_file_info():
         # text = data.decode("utf-8")
         # print(f"text: {text}")
         
+        # print(f"log from get_file_info(): {process_policy(file_metadata, file)}")
         return jsonify(process_policy(file_metadata, file))
         
         # return jsonify(decision)

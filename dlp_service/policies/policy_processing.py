@@ -3,4 +3,5 @@ from dlp_service.pub_sub import Broker
 from dlp_service.database import get_client_policy_criteria
 
 def process_policy(metadata, content):
+    # print(f"log from process_policy(): {check_policy(metadata, content)}")
     return check_policy(metadata, content)
