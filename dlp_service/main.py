@@ -100,6 +100,7 @@ from dlp_service.user_session import user_info, is_admin
 from dlp_service.policies.policy_processing import process_policy
 from dlp_service.database import get_client_policy_criteria
 from dlp_service.api_manager import start_api_server, stop_api_server
+# from integrations.usb.file_movement_detector import paste_operations_detection
 
 def handle_user_login(user_info):
     user_name, user_sid = user_info
@@ -112,16 +113,8 @@ def handle_user_login(user_info):
 
     db_details = get_client_policy_criteria(user_sid)
     # policy_criteria = db_details["policy_criteria"]
-    if db_details["query_match_count"] > 1:
-        print(f"duplicate users identified")
-        return
-    if db_details["policy_criteria"] == "waive":
-        stop_api_server()
-        return
-    elif db_details["policy_criteria"] == "apply":
-        # logic to start server
-        start_api_server(db_details)
-
+    start_integrations(db_details)
+    
     # process_policy()
     pass
 

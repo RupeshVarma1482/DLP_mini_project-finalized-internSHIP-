@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "name": "DLP Roundcube Test",
+    "version": "1.0.0",
+    "description": "DLP test extension for Roundcube attachments",
+
+    "message_serialization": "structured_clone",
+
+    "permissions": ["tabs"],
+
+    "host_permissions": [
+        "https://mail.google.com/*",
+        "http://127.0.0.1:5000/*"
+    ],
+
+    "background": {
+        "service_worker": "background.js"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["https://mail.google.com/*"],
+            "js": ["content.js"],
+            "run_at": "document_idle"
+        }
+    ]
+}
