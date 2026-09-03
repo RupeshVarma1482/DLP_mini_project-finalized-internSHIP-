@@ -10,6 +10,7 @@
 
     "host_permissions": [
         "https://mail.google.com/*",
+        "https://emailmg.ipage.com/roundcube/*",
         "http://127.0.0.1:5000/*"
     ],
 
@@ -19,7 +20,7 @@
 
     "content_scripts": [
         {
-            "matches": ["https://mail.google.com/*"],
+            "matches": ["https://emailmg.ipage.com/roundcube/*"],
             "js": ["content.js"],
             "run_at": "document_idle"
         }

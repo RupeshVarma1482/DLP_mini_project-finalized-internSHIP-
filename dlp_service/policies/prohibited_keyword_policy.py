@@ -18,14 +18,18 @@ def prohibited_keyword_SEARCH_for_TEXT(text):
             prohibited_word_encountered = True
             print(f"prohibited word found in text!!")
             if prohibited_word_encountered == True:
+                print(f"prohibited_word_encountered: {prohibited_word_encountered}")
+                print(f"returning - {{'allowed': False, 'reason': 'prohibited word found in TXT/CSV file'}}")
                 return {
                     "allowed": False,
                     "reason": "prohibited word found in TXT/CSV file"
                 }
         elif count < len(prohibited_words) - 1:
             print(f"iteration: {count} | word: {word} | current word is not found -> proceeding to next word")
-        else:
+        elif count == len(prohibited_words):
             print(f"prohibited word NOT found in text!!")
+            print(f"prohibited_word_encountered: {prohibited_word_encountered}")
+            print(f"returning - {'allowed': True, 'reason': 'prohibited word NOT found in received file'}")
             return {
                 "allowed": True,
                 "reason": "prohibited word NOT found in received file"

@@ -31,17 +31,14 @@ def get_file_info():
 
         data = file.read(20)
         print(f"data: {data} | it's type is: {type(data)}", end = "\n\n\n\n\n\n\n")
-        # text = data.decode("utf-8")
-        # print(f"text: {text}")
         
         # print(f"log from get_file_info(): {process_policy(file_metadata, file)}")
-        return jsonify(process_policy(file_metadata, file))
         
-        # return jsonify(decision)
-
-        # return jsonify({
-        #     "allowed": True
-        # })
+        return_value = process_policy(file_metadata, file)
+        print(f"json being returned to background.js is: {return_value}")
+        return jsonify(return_value)
+        
+        # return jsonify(process_policy(file_metadata, file))
     except Exception as e:
         print(f"ERROR:", repr(e))
         return jsonify({
